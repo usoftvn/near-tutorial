@@ -6,9 +6,11 @@ If you don't know anything about NEAR, you should read this article. It helps yo
 2. Step 2: Prepare the development environment
 3. Step 3: Know how to use some basic tools
 4. Step 4: Create the first NEAR project
-5. Step 5: Writing a smart contract using AssemblyScript
-6. Step 5: Deploy a smart contract on NEAR Testnet blockchain
-7. Step 6: Build the frontend
+5. Step 5: Understanding how to write a smart contract using AssemblyScript
+6. Step 6: Build, test and deploy a smart contract on NEAR Testnet blockchain
+7. Step 7: Understanding how to write the frontend
+8. Step 8: Deploy the frontend
+9. Step 9: More resources
 
 # Step 1: Learn the basics of NEAR Blockchain
 First you need to understand some basics of NEAR blockchain:
@@ -43,6 +45,7 @@ If you know how to program at least 1 of NodeJs, Javascript, RUST and AsemblyScr
 You should take a look at how to use the following tools:
 - **NEAR Wallet**: Let's start by creating a first address on the NEAR Testnet https://wallet.testnet.near.org/. Next use the features on this website.
 - **NEAR Explorer**: This is the place to help us look up transaction information to an account on the NEAR blockchain visually (https://explorer.testnet.near.org/)
+- **near-sdk-core**: You will have to use it to look up functions that work with the blockchain. Please see detail here: https://near.github.io/near-sdk-as/globals.html
 - **near-cli**: This is the tool you will have to work with regularly during the deployment and testing of smart contracts on NEAR. So you need to know some basic commands:
 ```
 // Show help
@@ -79,9 +82,13 @@ yarn create near-app hello-world
 cd hello-world
 ```
 This command will create a project with a smart contract and frontend available. The image below is the guide information after the project is created:
-![Create NEAR Project using near-create-app](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-01.png)
+<br />![Create NEAR Project using near-create-app](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-01.png)
 
 Folder structure of the project:
+- **contract**: Contain source code of the contract
+- **src**: Contain source code of the frontend.
+- **neardev**: Where to save account information used for development
+- **package.json**: File save project information 
 <br />![The project folder structure](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-05.png)
 
 If you want to know more commands, please see at https://github.com/near/create-near-app
@@ -99,333 +106,129 @@ You login using your wallet, you will see the main interface as follows:
 At this point, let's try to use the function of the application.
 
 
-# Step 5: Writing a smart contract using AssemblyScript
+# Step 5: Understanding how to write a smart contract using AssemblyScript
+Now let's focus on the **contract** folder, there are two important files:
+- **contract/assembly/index.ts**: The file containing the source code of the contract.
+- **contract/assembly/__tests__/main.spec.ts**: Unit test file for smart contract
 
-In addition, you should take a look in the following pages:
+Open the file source code **contract/assembly/index.ts**, you will see that our smart contract is quite simple, consisting of only 2 functions: 
+- **setGreeting()** function: Save a message to the NEAR blockchain. Each account can only save 1 message. 
+- **getGreeting()** function: Get message information for each account 
+```
+/*
+ * This is an example of an AssemblyScript smart contract with two simple,
+ * symmetric functions:
+ *
+ * 1. setGreeting: accepts a greeting, such as "howdy", and records it for the
+ *    user (account_id) who sent the request
+ * 2. getGreeting: accepts an account_id and returns the greeting saved for it,
+ *    defaulting to "Hello"
+ *
+ * Learn more about writing NEAR smart contracts with AssemblyScript:
+ * https://docs.near.org/docs/develop/contracts/as/intro
+ *
+ */
+
+import { Context, logging, storage } from 'near-sdk-as'
+
+const DEFAULT_MESSAGE = 'Hello'
+
+// Exported functions will be part of the public interface for your smart contract.
+// Feel free to extract behavior to non-exported functions!
+export function getGreeting(accountId: string): string | null {
+  // This uses raw `storage.get`, a low-level way to interact with on-chain
+  // storage for simple contracts.
+  // If you have something more complex, check out persistent collections:
+  // https://docs.near.org/docs/concepts/data-storage#assemblyscript-collection-types
+  return storage.get<string>(accountId, DEFAULT_MESSAGE)
+}
+
+export function setGreeting(message: string): void {
+  const accountId = Context.sender
+  // Use logging.log to record logs permanently to the blockchain!
+  logging.log(`Saving greeting "${message}" for account "${accountId}"`)
+  storage.set(accountId, message)
+}
+
+```
+
+You should pay attention to a few points as follows:
+- In the smart contract, there are 3 namespaces in the library of near-sdk-as. To manipulate blockchain using AsemblyScript, you are not required to use **near-sdk-as** library.
+- Use **Context.sender** to know who called the function 
+- Use **logging.log** to record logs permanently to the blockchain.
+- Use **storage** to store data permanently to the blockchain. There are also many other data types to store data on the blockchain. See details at: https://docs.near.org/docs/concepts/data-storage#assemblyscript-collection-types
+
+The file **contract/assembly/__tests__/main.spec.ts** contains source code to test smart contract:
+```
+import { setGreeting } from '..'
+import { storage, Context } from 'near-sdk-as'
+
+describe('Greeting ', () => {
+  it('should be set and read', () => {
+    setGreeting('hello world')
+    storage.get<string>(Context.sender)
+  })
+})
+```
+
+Now try to modify the source code for adding your own functions and use more types: **PersistentVector**, **PersistentSet**, **PersistentMap**, **PersistentUnorderedMap**, **PersistentDeque**.
+
+
+# Step 6: Build, test and deploy a smart contract on NEAR Testnet blockchain
+We use the following command to test only the smart contract:
+```
+npm run build:contract:debug && cd contract && npm run test
+```
+You will the test run OK:
+<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-08.png)
+
+We use the following command to build the smart contract:
+```
+yarn build:contract
+```
+The contract is built OK:
+<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-09.png)
+
+Next we will create a sub account and deploy a smart contract to this sub account:
+```
+// Create sub account
+near create-account helloworld.daothang.testnet --masterAccount daothang.testnet --initialBalance 10
+
+// Deploy smart contract
+near deploy --accountId helloworld.daothang.testnet --wasmFile out/main.wasm
+```
+<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-10.png)
+
+Let's try calling the functions on the smart contract:
+```
+near call helloworld.daothang.testnet setGreeting '{"message": "Good morning"}' --account-id daothang.testnet
+near view helloworld.daothang.testnet getGreeting '{"accountId": "daothang.testnet"}'
+```
+<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-11.png)
+
+# Step 7: Understanding how to write the frontend
+The entire frontend in the src directory, there are 4 files we need to care about:
+- **src/config.js**: Contains network and contract configuration. In this file you change the contract to the new contract you just deployed.
+<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-12.png)
+- **src/utils.js**: Initialize and declare functions in contract.
+- **src/index.js**: Contains the main javascript source code for business processing
+- **src/index.html**: Main interface
+- **src/main.test.js**: Used to test contract functions from users.
+
+If you know javascript, it will be easy for you to read.
+
+# Step 8: Deploy the frontend
+To deploy the frontend, you run the following command:
+```
+yarn deploy
+```
+Then you can put all the files in the dist directory to some host to run.
+
+# Step 9: More resources
+In addition, you should read more in the following pages:
 - **NEAR Account**: https://docs.near.org/docs/concepts/account
 - **Near 101**: https://learn.figment.io/protocols/near
 - **Near Example**: https://examples.near.org/
 - **AssemplyScript**: https://www.assemblyscript.org/introduction.html
 - **Hackathon Startup Guide**: https://docs.near.org/docs/develop/basics/hackathon-startup-guide
 - **NEAR Tutorials**: https://docs.near.org/docs/tutorials/overview
-
-
-
-=================================
-1. Follow NEAR Hackaton guide to setup environment - https://docs.near.org/docs/develop/basics/hackathon-startup-guide
-2. Clone or download this repository
-3. Update `CONTRACT_NAME` in `src\config.js` with your NEAR account
-4. Install dependencies with the command below
-
-```
-yarn install
-```
-
-# Smart Contract
-
-Essentially, this is a program that runs on blockchain. We will go through my contract step by step after which you should be able to make your own modifications and deploy your version of Voting system.
-
-# Lets Dig In!
-
-Open up `assembly\main.ts` file right at the beginning I setup few data structures required by our Voting System.
-
-## Candidate class
-
-```
-@nearBindgen
-class Candidate {
-	avatar: u64;
-	voteCount: number;
-	alive: boolean;
-
-	constructor(public name: string) {
-		this.avatar = context.blockIndex;
-		this.voteCount = 0;
-		this.alive = true;
-	}
-}
-```
-
-First line `@nearBindgen` is a special as it allows NEAR serialize our Candidate objects to be serialized on blockchain.
-
-After that we define few properties (`avatar`, `voteCount`, `alive`) our voting system will use to manage Candidate state. In the constructor we set our default for whenever new Candidate is created.
-
-In addition, we have declared one class property inside the constructor argument list. This is a shorthand to allow that argument to be passed in when object is created, set that properties value.
-
-There is a basic Vote class there as well but nothing different nor important is there but it could be extended with additional information, e.g. when vote was made.
-
-## CallResponse class
-
-When creating backend systems you always want to have a robust and consistent way you can get data back to be manipulated or displayed on frontend so we define this basic structure to be used in all out call functions.
-
-```
-@nearBindgen
-class CallResponse {
-	constructor(
-		public success: boolean,
-		public messages: string[],
-	) {
-
-	}
-}
-```
-
-`success` property indicates if request was successful to know how and which response to display to user in a user friendly way.
-`messages` in our case explain what went wrong with out request to end user or communicate other information - in our case for entertainment :)
-
-## ActionLog class
-
-All important system should have an ability to track down who changed what in the system. In our case it's who (which user) interacted with our system in what way (voted, added candidate, started a new election).
-
-```
-@nearBindgen
-class ActionLog {
-	constructor(
-		public user: string,
-		public action: string,
-	) {
-
-	}
-}
-```
-
-`user` contains their username and `action` explains what they did.
-
-## Data Storage
-
-In order for system to work and not just forget what it knows after each command is executed we need to preserve that data somewhere. You can read more about `PersistentUnorderedMap` and other storage options here - https://docs.near.org/docs/concepts/data-storage#persistentunorderedmap
-
-```
-const candidates = new PersistentUnorderedMap<number, Candidate>("m");
-const votes = new PersistentUnorderedMap<string, Vote>("n");
-const logs = new PersistentUnorderedMap<number, ActionLog>("b");
-```
-
-Important thing to keep in mind is that you need to specify different name (`m`, `n`, `b`) for each one of them. Otherwise, they all will point to the same data causing unexpected results.
-
-## Helpers
-
-In order to keep the rest of the code cleaner it's often useful to create some helper functions that handle repeated tasks for you.
-
-### Random Number & Boolean Generation
-
-In NEAR to work with randomness we need to user `math.randomBuffer` that comes from `near-sdk-core` - https://near.github.io/near-sdk-as/globals.html that returns X amount of random numbers for you to work with.
-
-```
-function randomNumber(min: number = 0, max: number = 100): i32 {
-	const buf = math.randomBuffer(4);
-	return i32(min + (((((0xff & buf[0]) << 24) |
-	((0xff & buf[1]) << 16) |
-	((0xff & buf[2]) << 8) |
-	((0xff & buf[3]) << 0)) as number) % (max - min)
-	));
-}
-
-function randomBoolean(): boolean {
-	return randomNumber(0, 100) >= 50;
-}
-```
-
-To get random boolean value we reuse our existing helper function `randomNumber` for simplicity.
-
-### Responses & Logs
-
-Other common functions I tend to use is `response` and `log`. These wrappers are very useful in a case where at some point you want to change how they work then you only have to do it in one place instead of digging through the whole code.
-
-```
-function response(messages: string[], success: boolean): CallResponse {
-	return new CallResponse(success, messages)
-}
-
-function log(message: string): void {
-	const logEntries = logs.keys();
-	logs.set(logEntries.length, new ActionLog(
-		context.sender,
-		message,
-	));
-}
-```
-
-# Add Candidate
-
-First, we need ability to add new candidates to the election.
-
-```
-export function addCandidate(name: string): CallResponse {
-	const candidate = new Candidate(name);
-
-	candidates.set(candidates.length, candidate);
-
-	log('Added candidate ' + candidate.name);
-
-	return response([candidate.name + ' successfully added to candidate list!'], true);
-}
-```
-
-There is only one argument `name` that we require and that's used to initialize a new Candidate. After that we store this candidate in our storage using `candidates.set(candidates.length, candidate)`. First parameter for set method is the key on how we want to identify and later retrieve our candidate. I simply use `candidates.length` which returns number of already existing candidates giving us a unique identifier for our Candidate.
-
-After that we log user action and respond with user friendly message.
-
-# View Candidate
-
-Users will want to know all available candidates and their votes. Thanks to `PersistentUnorderedMap` we can very easily return all our candidates using `candidates.entries()` that creates an array of key/value pairs of our candidates.
-
-```
-export function viewCandidates(): MapEntry<number, Candidate>[] {
-	return candidates.entries();
-}
-```
-
-# Vote
-
-And now, the most important function - ability to vote! This one is a bit more complex so I'll split it in parts.
-
-```
-export function vote(candidateId: string): CallResponse {
-	const candidateIntId = parseInt(candidateId);
-
-	if (votes.contains(context.sen
-	der)) {
-		return response(['You have already voted!'], false);
-	}
-```
-
-First, we check if user has already made a vote in the past in current election. If that's the case we respond with error message and mark request as unsuccessful.
-
-```
-	const candidate = candidates.get(candidateIntId);
-
-	if (candidate == null) {
-		return response(["Candidate doesn't exist!"], false);
-	}
-```
-
-Then we check if candidate user is voting for exists in the system. If it doesn't then we again respond with error message.
-
-```
-	if (candidate.alive) {
-		candidate.voteCount += 1;
-
-		candidates.set(candidateIntId, candidate);
-
-		votes.set(context.sender, new Vote(candidateIntId));
-
-		log('Voted for ' + candidate.name);
-
-		return response(["Successfully voted for " + candidate.name + "!"], true);
-```
-
-Now, that we know user can vote for a valid candidate, we check if candidate is alive. If he is then we increase candidates `voteCount`, save the updated candidate and store information that this user voted for this participant.
-
-After that we log their action and respond with successful request and message.
-
-```
-	} else {
-		return response([
-			"You can't vote for the dead!",
-			"Or can you?",
-			"No, no, you can't :p",
-		], false);
-	}
-}
-```
-
-Finally, if candidate is indeed dead (can happen through other commands in the system) we return a small entertaining joke message and mark request as failed.
-
-# That's It Folks!
-
-This covers the basic functionallity of our voting system. If you keep scrolling down in `assembly\main.ts` you will find additional commands to explore and experiment with.
-
-Now that we have gone through the code - we want to build and deploy our voting system to NEAR.
-
-# Build & Deploy
-
-Before you build and deploy your Smart Contract (our Voting System) make sure that you have logged in using NEAR by typing `near login` in console and updating `CONTRACT_NAME` in `src\config.js` with your username as that's where the contract will be deployed.
-
-Now, build the contract by executing command below in root directory of the project.
-
-```
-yarn run build:contract
-```
-
-Then deploy it using command below
-
-```
-near deploy
-```
-
-# Commands
-
-Now, that your Smart Contract is deployed you can call these methods to interact with it.
-
-**IMPORTANT** - replace `near-challenge-7.testnet` and `martint.testnet` with your own username.
-
-## Add Candidate
-
-**Command**
-
-```
-near call near-challenge-7.testnet addCandidate '{ "name": "Trump" }' --accountId martint.testnet --gas 300000000000000
-```
-
-**Result**
-
-```
-{
-  success: true,
-  messages: [ 'Trump successfully added to candidate list!' ]
-}
-```
-
-## View Candidates
-
-**Command**
-
-```
-near view near-challenge-7.testnet viewCandidates
-```
-
-**Result**
-
-```
-[
-  {
-    key: 0,
-    value: { avatar: '72724247', voteCount: 0, alive: true, name: 'Trump' }
-  },
-  {
-    key: 1,
-    value: { avatar: '72724317', voteCount: 3998, alive: true, name: 'Trump Junior' }
-  },
-  {
-    key: 2,
-    value: { avatar: '72724344', voteCount: 1, alive: true, name: 'Martin' }
-  }
-]
-```
-
-## Vote
-
-**Command**
-
-```
-near call near-challenge-7.testnet vote '{ "candidateId": "2" }' --accountId martint.testnet --gas 300000000000000
-```
-
-**Result**
-
-```
-{
-  success: true,
-  messages: [ 'Successfully voted for Martin!' ]
-}
-
-or
-
-{
-  success: false,
-  messages: [ 'You have already voted!' ]
-}
-```
-
-Feel free to go through the rest of the commands/functions in `assembly\main.ts` and see exactly what they do and how they respond here - https://github.com/MartinTale/near-challenge-7/blob/main/DETAILS.md
