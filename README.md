@@ -1,11 +1,13 @@
 # HOW TO START WITH NEAR BLOCKCHAIN
 If you don't know anything about NEAR, you should read this article. It helps you step by step approach to the NEAR blockchain and build a DApp on it.
 
-This tutorial goes through Smart Contract I made for NEAR Challenge #7. See list below of features we will be going through.
-
-# Features
-
-**Candidates**
+# Appendix
+-   Learn the basics of NEAR Blockchain
+-   Prepare the development environment
+-   Create the first NEAR project
+-   Writing a smart contract using AssemblyScript
+-   Deploy a smart contract on NEAR Testnet blockchain
+-   Build the frontend
 
 -   Add Candidate
 -   Add Candidate - Trump Mode
