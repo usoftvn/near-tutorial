@@ -211,6 +211,47 @@ The entire frontend in the src directory, there are 4 files we need to care abou
 - **src/config.js**: Contains network and contract configuration. In this file you change the contract to the new contract you just deployed.
 <br />![](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-12.png)
 - **src/utils.js**: Initialize and declare functions in contract.
+```
+import { connect, Contract, keyStores, WalletConnection } from 'near-api-js'
+import getConfig from './config'
+
+const nearConfig = getConfig(process.env.NODE_ENV || 'development')
+
+// Initialize contract & set global variables
+export async function initContract() {
+  // Initialize connection to the NEAR testnet
+  const near = await connect(Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, nearConfig))
+
+  // Initializing Wallet based Account. It can work with NEAR testnet wallet that
+  // is hosted at https://wallet.testnet.near.org
+  window.walletConnection = new WalletConnection(near)
+
+  // Getting the Account ID. If still unauthorized, it's just empty string
+  window.accountId = window.walletConnection.getAccountId()
+
+  // Initializing our contract APIs by contract name and configuration
+  window.contract = await new Contract(window.walletConnection.account(), nearConfig.contractName, {
+    // View methods are read only. They don't modify the state, but usually return some value.
+    viewMethods: ['getGreeting'],
+    // Change methods can modify the state. But you don't receive the returned value when called.
+    changeMethods: ['setGreeting'],
+  })
+}
+
+export function logout() {
+  window.walletConnection.signOut()
+  // reload page
+  window.location.replace(window.location.origin + window.location.pathname)
+}
+
+export function login() {
+  // Allow the current app to make calls to the specified contract on the
+  // user's behalf.
+  // This works by creating a new access key for the user's account and storing
+  // the private key in localStorage.
+  window.walletConnection.requestSignIn(nearConfig.contractName)
+}
+```
 - **src/index.js**: Contains the main javascript source code for business processing
 - **src/index.html**: Main interface
 - **src/main.test.js**: Used to test contract functions from users.
