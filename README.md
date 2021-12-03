@@ -4,10 +4,11 @@ If you don't know anything about NEAR, you should read this article. It helps yo
 # Appendix
 1. Step 1: Learn the basics of NEAR Blockchain
 2. Step 2: Prepare the development environment
-3. Step 3: Create the first NEAR project
-4. Step 4: Writing a smart contract using AssemblyScript
-5. Step 5: Deploy a smart contract on NEAR Testnet blockchain
-6. Step 6: Build the frontend
+3. Step 3: Know how to use some basic tools
+4. Step 3: Create the first NEAR project
+5. Step 4: Writing a smart contract using AssemblyScript
+6. Step 5: Deploy a smart contract on NEAR Testnet blockchain
+7. Step 6: Build the frontend
 
 # Step 1: Learn the basics of NEAR Blockchain
 First you need to understand some basics of NEAR blockchain:
@@ -17,19 +18,69 @@ First you need to understand some basics of NEAR blockchain:
 
 # Step 2: Prepare the development environment 
 To be able to start developing on the NEAR blockhain, you need to prepare the environment for development:
-- NodeJs: You need to install NodeJs version 14 or higher. Please download NodeJs from here: https://nodejs.org/en/
-- Yarn: Install yarn using below command:
+- **NodeJs**: You need to install NodeJs version 14 or higher. Please download NodeJs from here: https://nodejs.org/en/
+- **Yarn**: Install yarn using below command:
 ```
 npm i -g yarn
 ```
-- 
--  and then install yarn:
-
-near-sdk-as: We will write the contract in AssemblyScript language, so we need to install near-sdk-as with the following command:
+- **near-sdk-as**: We will write the contract in AssemblyScript language, so we need to install near-sdk-as with the following command:
+```
 yarn add -D near-sdk-as
-near-cli: A tool that provides an interface for manipulating the NEAR blockchain. We use it to deploy Smart Contract and call Smart Contract functions, and it does many other things. You can see more details at NEAR-CLI. You use the following command to install:
+```
+- **near-cli**: A tool that provides an interface for manipulating the NEAR blockchain. We use it to deploy Smart Contract and call Smart Contract functions
+```
 npm i -g near-cli
+```
+- **near-api-js**: 
+If you need to program on NodeJs to connect to the NEAR Blockchain, the near-api-js library is essential. Before using on NodeJs you must install this library with command:
+```
+npm install near-api-js
+```
 
+If you know how to program at least 1 of NodeJs, Javascript, RUST and AsemblyScript languages, there will be more advantages.
+
+# Step 3: Know how to use some basic tools
+You should take a look at how to use the following tools:
+- **NEAR Wallet**: Let's start by creating a first address on the NEAR Testnet https://wallet.testnet.near.org/. Next use the features on this website.
+- **NEAR Explorer**: This is the place to help us look up transaction information to an account on the NEAR blockchain visually (https://explorer.testnet.near.org/)
+- **near-cli**: This is the tool you will have to work with regularly during the deployment and testing of smart contracts on NEAR. So you need to know some basic commands:
+```
+// Show help
+near --help
+
+// Login to your NEAR account. You can later use this account to deploy smart contracts.
+// For example, I log in to my daothang.testnet account
+near login
+
+// Create a sub account, change daothang.testnet to your account
+near create-account test01.daothang.testnet --masterAccount daothang.testnet --initialBalance 20
+
+// Deploy smart contract to sub account
+near deploy --accountId test01.daothang.testnet --wasmFile out/example.wasm
+near deploy --accountId test01.daothang.testnet --wasmFile out/example.wasm --initFunction new --initArgs '{"owner_id": "example-contract.testnet", "total_supply": "10000000"}'
+
+// Call a view function on smart contract (No fee)
+near view test01.daothang.testnet getMessages '{}'
+
+// Call a function on smart contract (Have fee)
+near call test01.daothang.testnet addMessage '{"text": "Aloha"}' --account-id example-acct.testnet
+
+// ...
+```
+Please see detail here: https://docs.near.org/docs/tools/near-cli
+
+In addition, you should take a look in the following pages:
+- **NEAR Account**: https://docs.near.org/docs/concepts/account
+- **Near 101**: https://learn.figment.io/protocols/near
+- **Near Example**: https://examples.near.org/
+- **AssemplyScript**: https://www.assemblyscript.org/introduction.html
+- **Hackathon Startup Guide**: https://docs.near.org/docs/develop/basics/hackathon-startup-guide
+
+
+
+
+
+, and it does many other things. You can see more details at NEAR-CLI. You use the following command to install:
 =================================
 1. Follow NEAR Hackaton guide to setup environment - https://docs.near.org/docs/develop/basics/hackathon-startup-guide
 2. Clone or download this repository
