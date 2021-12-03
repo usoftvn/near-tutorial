@@ -6,7 +6,7 @@ If you don't know anything about NEAR, you should read this article. It helps yo
 2. Step 2: Prepare the development environment
 3. Step 3: Know how to use some basic tools
 4. Step 4: Create the first NEAR project
-5. Step 4: Writing a smart contract using AssemblyScript
+5. Step 5: Writing a smart contract using AssemblyScript
 6. Step 5: Deploy a smart contract on NEAR Testnet blockchain
 7. Step 6: Build the frontend
 
@@ -69,30 +69,47 @@ near call test01.daothang.testnet addMessage '{"text": "Aloha"}' --account-id ex
 ```
 Please see detail here: https://docs.near.org/docs/tools/near-cli
 
+# Step 4: Create the first NEAR project
+Now we will create the first project on NEAR with the following command:
+```
+// Create project hello-world
+yarn create near-app hello-world
+
+// Go to the project folder
+cd hello-world
+```
+This command will create a project with a smart contract and frontend available. The image below is the guide information after the project is created:
+![Create NEAR Project using near-create-app](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-01.png)
+Folder structure of the project:
+![The project folder structure](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-05.png)
+
+If you want to know more commands, please see at https://github.com/near/create-near-app
+
+Now, we run it with the following command:
+```
+yarn dev
+```
+Build and run successfully you will see:
+![Build and run successfully](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-02.png)
+And the browser automatically opens the link http://localhost:1234/ and you will see the following interface:
+!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-03.png)
+You login using your wallet, you will see the main interface as follows:
+!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-04.png)
+At this point, let's try to use the function of the application.
+
+
+# Step 5: Writing a smart contract using AssemblyScript
+
 In addition, you should take a look in the following pages:
 - **NEAR Account**: https://docs.near.org/docs/concepts/account
 - **Near 101**: https://learn.figment.io/protocols/near
 - **Near Example**: https://examples.near.org/
 - **AssemplyScript**: https://www.assemblyscript.org/introduction.html
 - **Hackathon Startup Guide**: https://docs.near.org/docs/develop/basics/hackathon-startup-guide
-
-# Step 4: Create the first NEAR project
-Now we will create the first project on NEAR with the following command:
-```
-yarn create near-app hello-world
-cd hello-world
-```
-If you want to know more commands, please see at https://github.com/near/create-near-app
-
-This command will create a project with a smart contract and frontend available. We run it with the following command:
-```
-yarn dev
-```
+- **NEAR Tutorials**: https://docs.near.org/docs/tutorials/overview
 
 
 
-
-, and it does many other things. You can see more details at NEAR-CLI. You use the following command to install:
 =================================
 1. Follow NEAR Hackaton guide to setup environment - https://docs.near.org/docs/develop/basics/hackathon-startup-guide
 2. Clone or download this repository
