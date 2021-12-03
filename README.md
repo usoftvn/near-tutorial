@@ -100,9 +100,9 @@ yarn dev
 Build and run successfully you will see:
 <br />![Build and run successfully](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-02.png)
 And the browser automatically opens the link http://localhost:1234/ and you will see the following interface:
-<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-03.png)
+<br />![](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-03.png)
 You login using your wallet, you will see the main interface as follows:
-<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-04.png)
+<br />![](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-04.png)
 At this point, let's try to use the function of the application.
 
 
@@ -180,14 +180,14 @@ We use the following command to test only the smart contract:
 npm run build:contract:debug && cd contract && npm run test
 ```
 You will the test run OK:
-<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-08.png)
+<br />![](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-08.png)
 
 We use the following command to build the smart contract:
 ```
 yarn build:contract
 ```
 The contract is built OK:
-<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-09.png)
+<br />![](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-09.png)
 
 Next we will create a sub account and deploy a smart contract to this sub account:
 ```
@@ -197,19 +197,19 @@ near create-account helloworld.daothang.testnet --masterAccount daothang.testnet
 // Deploy smart contract
 near deploy --accountId helloworld.daothang.testnet --wasmFile out/main.wasm
 ```
-<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-10.png)
+<br />![](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-10.png)
 
 Let's try calling the functions on the smart contract:
 ```
 near call helloworld.daothang.testnet setGreeting '{"message": "Good morning"}' --account-id daothang.testnet
 near view helloworld.daothang.testnet getGreeting '{"accountId": "daothang.testnet"}'
 ```
-<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-11.png)
+<br />![](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-11.png)
 
 # Step 7: Understanding how to write the frontend
 The entire frontend in the src directory, there are 4 files we need to care about:
 - **src/config.js**: Contains network and contract configuration. In this file you change the contract to the new contract you just deployed.
-<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-12.png)
+<br />![](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-12.png)
 - **src/utils.js**: Initialize and declare functions in contract.
 - **src/index.js**: Contains the main javascript source code for business processing
 - **src/index.html**: Main interface
