@@ -80,8 +80,9 @@ cd hello-world
 ```
 This command will create a project with a smart contract and frontend available. The image below is the guide information after the project is created:
 ![Create NEAR Project using near-create-app](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-01.png)
+
 Folder structure of the project:
-![The project folder structure](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-05.png)
+<br />![The project folder structure](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-05.png)
 
 If you want to know more commands, please see at https://github.com/near/create-near-app
 
@@ -90,11 +91,11 @@ Now, we run it with the following command:
 yarn dev
 ```
 Build and run successfully you will see:
-![Build and run successfully](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-02.png)
+<br />![Build and run successfully](https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-02.png)
 And the browser automatically opens the link http://localhost:1234/ and you will see the following interface:
-!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-03.png)
+<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-03.png)
 You login using your wallet, you will see the main interface as follows:
-!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-04.png)
+<br />!(https://raw.githubusercontent.com/usoftvn/near-tutorial/main/images/near-tutorial-04.png)
 At this point, let's try to use the function of the application.
 
 
