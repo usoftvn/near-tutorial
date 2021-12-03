@@ -83,7 +83,11 @@ yarn create near-app hello-world
 cd hello-world
 ```
 If you want to know more commands, please see at https://github.com/near/create-near-app
-This command will create a project with a smart contract and frontend available.
+
+This command will create a project with a smart contract and frontend available. We run it with the following command:
+```
+yarn dev
+```
 
 
 
