@@ -2,38 +2,35 @@
 If you don't know anything about NEAR, you should read this article. It helps you step by step approach to the NEAR blockchain and build a DApp on it.
 
 # Appendix
--   Learn the basics of NEAR Blockchain
--   Prepare the development environment
--   Create the first NEAR project
--   Writing a smart contract using AssemblyScript
--   Deploy a smart contract on NEAR Testnet blockchain
--   Build the frontend
+1. Step 1: Learn the basics of NEAR Blockchain
+2. Step 2: Prepare the development environment
+3. Step 3: Create the first NEAR project
+4. Step 4: Writing a smart contract using AssemblyScript
+5. Step 5: Deploy a smart contract on NEAR Testnet blockchain
+6. Step 6: Build the frontend
 
--   Add Candidate
--   Add Candidate - Trump Mode
--   Add Candidate - Hitler Mode
--   Ask Cat to Revive Candidate
--   Remove Candidate
--   View Candidates
+# Step 1: Learn the basics of NEAR Blockchain
+First you need to understand some basics of NEAR blockchain:
+- NEAR is a 3rd generation blockchain, born with the purpose of focusing on solving the problem of scalability using Sharding technology. Please see detail here: https://learnnear.club/what-is-near-protocol/
+- NEAR uses a PoS consensus algorithm called Nightshade: https://near.org/papers/nightshade/
+- Consensus protocols are used to reach agreement on a single value between multiple participants in a system. If all network participants collaborate in accordance with the consensus protocol, new values may be appended to the ledger and verified by nodes. However, in the case of disputes, the network may focus on either safety or liveness.
 
-**Votes**
+# Step 2: Prepare the development environment 
+To be able to start developing on the NEAR blockhain, you need to prepare the environment for development:
+- NodeJs: You need to install NodeJs version 14 or higher. Please download NodeJs from here: https://nodejs.org/en/
+- Yarn: Install yarn using below command:
+```
+npm i -g yarn
+```
+- 
+-  and then install yarn:
 
--   Vote
--   Vote - 360 No Scope Mode
--   Remove Your Vote
--   View Votes
+near-sdk-as: We will write the contract in AssemblyScript language, so we need to install near-sdk-as with the following command:
+yarn add -D near-sdk-as
+near-cli: A tool that provides an interface for manipulating the NEAR blockchain. We use it to deploy Smart Contract and call Smart Contract functions, and it does many other things. You can see more details at NEAR-CLI. You use the following command to install:
+npm i -g near-cli
 
-**Election**
-
--   Get Leading Candidate
--   Start New Election
-
-**Utility**
-
--   View Logs
-
-# Setup
-
+=================================
 1. Follow NEAR Hackaton guide to setup environment - https://docs.near.org/docs/develop/basics/hackathon-startup-guide
 2. Clone or download this repository
 3. Update `CONTRACT_NAME` in `src\config.js` with your NEAR account
