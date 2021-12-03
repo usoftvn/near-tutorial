@@ -5,7 +5,7 @@ If you don't know anything about NEAR, you should read this article. It helps yo
 1. Step 1: Learn the basics of NEAR Blockchain
 2. Step 2: Prepare the development environment
 3. Step 3: Know how to use some basic tools
-4. Step 3: Create the first NEAR project
+4. Step 4: Create the first NEAR project
 5. Step 4: Writing a smart contract using AssemblyScript
 6. Step 5: Deploy a smart contract on NEAR Testnet blockchain
 7. Step 6: Build the frontend
@@ -76,6 +76,14 @@ In addition, you should take a look in the following pages:
 - **AssemplyScript**: https://www.assemblyscript.org/introduction.html
 - **Hackathon Startup Guide**: https://docs.near.org/docs/develop/basics/hackathon-startup-guide
 
+# Step 4: Create the first NEAR project
+Now we will create the first project on NEAR with the following command:
+```
+yarn create near-app hello-world
+cd hello-world
+```
+If you want to know more commands, please see at https://github.com/near/create-near-app
+This command will create a project with a smart contract and frontend available.
 
 
 
